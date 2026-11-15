@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mango Handout: Match the Article</title>
+<style>
+:root{--bg:#fff8e7;--card:#ffffff;--text:#1c2430;--muted:#5f6670;--accent:#f4b73a;--ink:#1c2430;--orange:#c85a24;--good:#1d7a4d;--good-bg:#e3f4ea;--bad:#b3261e;--bad-bg:#fbe7e5;--line:#eadfc2;color-scheme:light}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1c2430;--card:#273246;--text:#f6f4ef;--muted:#b9bfc9;--orange:#f0a36b;--good:#7fd6a4;--good-bg:#1f3b2e;--bad:#ff9d94;--bad-bg:#4a2523;--line:#3a4a63;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1c2430;--card:#273246;--text:#f6f4ef;--muted:#b9bfc9;--orange:#f0a36b;--good:#7fd6a4;--good-bg:#1f3b2e;--bad:#ff9d94;--bad-bg:#4a2523;--line:#3a4a63;color-scheme:dark}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.45}
+main{max-width:600px;margin:0 auto;padding:20px 18px 48px}
+.brand{display:flex;justify-content:space-between;font-weight:700;font-size:15px;color:var(--orange);margin-bottom:14px}
+.brand span:last-child{color:var(--muted);font-weight:600}
+h1{font-size:27px;line-height:1.2;margin:0 0 8px}
+h2{font-size:21px;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+button{font:inherit;color:inherit;cursor:pointer}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;margin:12px 0}
+.it{text-align:left;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:10px 12px;font-size:15px;min-height:64px}
+.it b{display:block;font-size:19px}
+.it small{display:block;color:var(--muted);font-size:14px}
+.it.sel{border-color:var(--accent);background:var(--accent);color:var(--ink)}
+.it.sel small{color:var(--ink)}
+.it.ok{border-color:var(--good);background:var(--good-bg);cursor:default}
+.it.no{border-color:var(--bad);background:var(--bad-bg)}
+.prog{font-weight:700;color:var(--orange);margin:0}
+.primary{display:block;width:100%;background:var(--accent);color:var(--ink);border:0;border-radius:14px;padding:14px;font-size:18px;font-weight:700;margin-top:8px}
+ul{padding-left:20px;margin:8px 0}
+li{margin-bottom:6px}
+.big{font-size:28px;font-weight:800;color:var(--orange);margin:0 0 6px}
+.src{margin-top:22px;font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+<div class="brand"><span>🥭 Group Mango</span><span>Handout</span></div>
+<h1>AI’s Effect on Workplace Culture</h1>
+<p class="sub">The article in one sentence: Gallup asks if AI makes workplace culture better. The answer is “it depends on managers.”</p>
+<div id="app"></div>
+<p class="src">Source: Gallup, “AI’s Effect on Workplace Culture” (2026).</p>
+</main>
+<script>
+var R=[
+{n:"Round 1: Match the key words",p:[
+["CHRO","","The top leader for people in a company"],
+["Adoption","","Starting to use AI in daily work"],
+["Culture","","How people work and feel together"],
+["Catalyst","","Something that speeds up change, good or bad"],
+["AI champion","","A person who helps others use AI"],
+["Peer learning","","Learning from each other"]]},
+{n:"Round 2: Match the key numbers",p:[
+["99%","","CHROs who say AI is important to strategy"],
+["50%","","CHROs not confident that managers can guide AI use"],
+["33% vs 4%","","Say AI changed how work gets done, with vs without strong manager support"],
+["78%","","Companies that encourage peer learning with AI"],
+["57%","","Companies that train managers on AI"],
+["26%","","Companies that put AI skills into job goals"]]}
+];
+var app=document.getElementById("app"),r,order,sel,done,wrong,miss;
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function startRound(k){
+r=k;var n=R[k].p.length;
+order=shuffle(R[k].p.map(function(_,i){return i;}));
+sel={L:null,R:null};done=[];wrong=null;miss=0;render();
+}
+function cls(s,i){
+var c="it";
+if(done.indexOf(i)>=0)return c+" ok";
+if(wrong&&wrong[s]===i)return c+" no";
+if(sel[s]===i)return c+" sel";
+return c;
+}
+function render(){
+var P=R[r].p,h='<div class="card"><h2>'+R[r].n+'</h2><p class="prog">'+done.length+' / '+P.length+' matched</p><p class="sub" style="margin:4px 0 0">Tap one on the left and one on the right.</p><div class="grid">';
+for(var k=0;k<P.length;k++){
+var L=k,Rr=order[k];
+h+='<button class="'+cls("L",L)+'" data-s="L" data-i="'+L+'"><b>'+P[L][0]+'</b>'+(P[L][1]?'<small>'+P[L][1]+'</small>':'')+'</button>';
+h+='<button class="'+cls("R",Rr)+'" data-s="R" data-i="'+Rr+'">'+P[Rr][2]+'</button>';
+}
+h+='</div>';
+if(done.length===P.length){
+h+='<p class="big">'+(miss===0?"Perfect! 🥭":"Done! 🥭")+'</p><button class="primary" id="nx">'+(r<R.length-1?"Next round":"Finish")+'</button>';
+}
+h+='</div>';
+app.innerHTML=h;
+var nx=document.getElementById("nx");
+if(nx)nx.onclick=function(){if(r<R.length-1)startRound(r+1);else end();};
+}
+app.addEventListener("click",function(e){
+var b=e.target.closest(".it");
+if(!b||wrong)return;
+var s=b.dataset.s,i=+b.dataset.i;
+if(done.indexOf(i)>=0)return;
+sel[s]=(sel[s]===i)?null:i;
+if(sel.L!==null&&sel.R!==null){
+if(sel.L===sel.R){done.push(sel.L);sel={L:null,R:null};}
+else{miss++;wrong={L:sel.L,R:sel.R};sel={L:null,R:null};render();setTimeout(function(){wrong=null;render();},600);return;}
+}
+render();
+});
+function end(){
+app.innerHTML='<div class="card"><p class="big">Now you know the article 🥭</p><p><b>3 key ideas</b></p><ul><li>AI alone does not guarantee a better culture. Employees say it gets better and worse about equally.</li><li>Managers make the difference. With strong manager support, more employees say AI changed how work gets done.</li><li>Training is not enough. Managers need clear guidance, enough time, and real support.</li></ul></div><button class="primary" id="again">Play again</button>';
+document.getElementById("again").onclick=function(){startRound(0);};
+}
+startRound(0);
+</script>
+</body>
+</html>
